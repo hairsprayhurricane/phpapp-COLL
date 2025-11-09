@@ -154,3 +154,76 @@ function deleteUser(id, name) {
         alert('Ошибка соединения с сервером');
     });
 }
+
+// Cookie
+function setCookie(name, value, days = 180) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days*24*60*60*1000));
+    const expires = 'expires=' + d.toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + ';' + expires + ';path=/;SameSite=Lax';
+}
+
+function getCookie(name) {
+    const cname = name + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1);
+        if (c.indexOf(cname) === 0) return c.substring(cname.length, c.length);
+    }
+    return null;
+}
+
+function showConsentModal() {
+    const modal = document.getElementById('cookie-consent');
+    if (modal) modal.style.display = 'flex';
+}
+
+function hideConsentModal() {
+    const modal = document.getElementById('cookie-consent');
+    if (modal) modal.style.display = 'none';
+}
+
+function renderCookieInfo(state) {
+    const info = document.getElementById('cookie-info');
+    if (!info) return;
+    if (state === 'accepted') {
+        const lang = navigator.language || 'ru-RU';
+        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
+        const ua = navigator.userAgent;
+        info.innerHTML = 'Cookie принято. Язык браузера: ' + lang + ', Часовой пояс: ' + tz + '.';
+        info.style.color = '#0a0a0a';
+    } else if (state === 'declined') {
+        info.textContent = 'Cookie отклонено. Персональные функции отключены.';
+        info.style.color = '#7f1d1d';
+    } else {
+        info.textContent = '';
+    }
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+    const current = getCookie('cookie_consent');
+    if (!current) {
+        showConsentModal();
+    } else {
+        renderCookieInfo(current);
+    }
+
+    const acceptBtn = document.getElementById('cookie-accept');
+    const declineBtn = document.getElementById('cookie-decline');
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', function () {
+            setCookie('cookie_consent', 'accepted');
+            hideConsentModal();
+            renderCookieInfo('accepted');
+        });
+    }
+    if (declineBtn) {
+        declineBtn.addEventListener('click', function () {
+            setCookie('cookie_consent', 'declined');
+            hideConsentModal();
+            renderCookieInfo('declined');
+        });
+    }
+});

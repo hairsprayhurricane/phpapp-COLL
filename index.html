@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management App</title>
+    <style>
+        .cookie-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .cookie-modal { background: #fff; max-width: 520px; width: calc(100% - 32px); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); padding: 16px 16px 12px; }
+        .cookie-modal h3 { margin: 0 0 8px; font-size: 18px; }
+        .cookie-modal p { margin: 0 0 12px; }
+        .cookie-actions { display: flex; gap: 8px; justify-content: flex-end; }
+        .btn { padding: 8px 12px; border: 1px solid #ccc; background: #f7f7f7; border-radius: 6px; cursor: pointer; }
+        .btn.primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+        #cookie-info { margin: 12px 0; padding: 8px 10px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; }
+    </style>
 </head>
 <body>
     <h1>Система управления пользователями</h1>
+    <div id="cookie-info"></div>
 
     <h2>Регистрация нового пользователя</h2>
     <form id="feedback-form" method="POST">
@@ -72,6 +83,17 @@
     <footer>
         <p>&copy; Made on Tilda</p>
     </footer>
+
+    <div id="cookie-consent" class="cookie-modal-backdrop">
+        <div class="cookie-modal">
+            <h3>cookie</h3>
+            <p>да.</p>
+            <div class="cookie-actions">
+                <button id="cookie-decline" class="btn">нет</button>
+                <button id="cookie-accept" class="btn primary">Принять</button>
+            </div>
+        </div>
+    </div>
 
     <script src="main.js"></script>
 </body>
